@@ -69,6 +69,39 @@
             border-color: var(--gold);
         }
 
+        /* TABLE SELECTOR STYLES */
+        .table-selector-wrap {
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .table-select {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .table-select:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+        }
+
+        .table-select option {
+            background: var(--navy-mid);
+            color: white;
+        }
+
         .goog-te-banner-frame.skiptranslate,
         .goog-te-balloon-frame.skiptranslate,
         .goog-text-highlight {
@@ -808,6 +841,7 @@
             const [scrolled, setScrolled] = useState(false);
             const [recentlyAdded, setRecentlyAdded] = useState(null);
             const [infoItem, setInfoItem] = useState(null);
+            const [tableNumber, setTableNumber] = useState('1');
 
             const categories = [
                 { id: 'all', label: 'All Items', icon: '✨' },
@@ -874,6 +908,7 @@
                             <div class="header">
                                 <div class="hotel-name">Swiss Inn Nexus</div>
                                 <div>Lobby Bar Menu</div>
+                                <div style="font-weight: bold; margin: 5px 0;">Table / Seat: ${tableNumber}</div>
                                 <div>Date: ${new Date().toLocaleString()}</div>
                             </div>
                             ${cart.map(item => `
@@ -932,6 +967,18 @@
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="table-selector-wrap">
+                                    <span>🪑 Seat:</span>
+                                    <select
+                                        className="table-select"
+                                        value={tableNumber}
+                                        onChange={(e) => setTableNumber(e.target.value)}
+                                    >
+                                        {[...Array(20)].map((_, i) => (
+                                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <div id="google_translate_element"></div>
                                 <button className="add-to-order-btn" style={{ marginLeft: '15px' }} onClick={() => {
                                     const el = document.getElementById('menu');
