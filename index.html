@@ -248,8 +248,37 @@
             font-size: 0.85rem;
             color: var(--text-muted);
             line-height: 1.6;
-            min-height: 3.2em;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-description.expanded {
+            -webkit-line-clamp: unset;
+            line-clamp: unset;
+            display: block;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--navy);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
             margin-bottom: 15px;
+            text-decoration: underline;
+            text-decoration-color: var(--gold);
+            text-underline-offset: 3px;
+        }
+
+        .read-more-btn:hover {
+            color: var(--gold-dark);
         }
 
         .card-footer {
@@ -581,10 +610,10 @@
 
             .card-description {
                 font-size: 0.75rem;
-                min-height: auto;
-                margin-bottom: 10px;
+                margin-bottom: 4px;
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
+                line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
             }
@@ -709,6 +738,7 @@
             const [isModalOpen, setIsModalOpen] = useState(false);
             const [scrolled, setScrolled] = useState(false);
             const [recentlyAdded, setRecentlyAdded] = useState(null);
+            const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
             const categories = [
                 { id: 'all', label: 'All Items', icon: '✨' },
@@ -749,6 +779,13 @@
             };
 
             const removeItem = (id) => setCart(prev => prev.filter(i => i.id !== id));
+
+            const toggleDescription = (id) => {
+                setExpandedDescriptions(prev => ({
+                    ...prev,
+                    [id]: !prev[id]
+                }));
+            };
 
             const handlePrint = () => {
                 const printWindow = window.open('', '_blank');
@@ -898,7 +935,17 @@
                                     </div>
                                     <div className="card-body">
                                         <h3 className="card-name">{item.name}</h3>
-                                        <p className="card-description">{item.description}</p>
+                                        <p className={`card-description ${expandedDescriptions[item.id] ? 'expanded' : ''}`}>
+                                            {item.description}
+                                        </p>
+                                        {item.description.length > 60 && (
+                                            <button
+                                                className="read-more-btn"
+                                                onClick={() => toggleDescription(item.id)}
+                                            >
+                                                {expandedDescriptions[item.id] ? 'Show Less' : 'See More'}
+                                            </button>
+                                        )}
                                         <div className="card-footer">
                                             <div className="card-price">ETB {item.price.toFixed(2)}</div>
                                             <button
