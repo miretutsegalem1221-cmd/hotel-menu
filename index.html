@@ -254,13 +254,35 @@
             line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
-        .card-description.expanded {
-            -webkit-line-clamp: unset;
-            line-clamp: unset;
-            display: block;
+        /* Description Modal Specific Styles */
+        .desc-modal-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .desc-modal-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .desc-modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .desc-modal-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 25px;
         }
 
         .read-more-btn {
@@ -738,7 +760,7 @@
             const [isModalOpen, setIsModalOpen] = useState(false);
             const [scrolled, setScrolled] = useState(false);
             const [recentlyAdded, setRecentlyAdded] = useState(null);
-            const [expandedDescriptions, setExpandedDescriptions] = useState({});
+            const [infoItem, setInfoItem] = useState(null);
 
             const categories = [
                 { id: 'all', label: 'All Items', icon: '✨' },
@@ -779,13 +801,6 @@
             };
 
             const removeItem = (id) => setCart(prev => prev.filter(i => i.id !== id));
-
-            const toggleDescription = (id) => {
-                setExpandedDescriptions(prev => ({
-                    ...prev,
-                    [id]: !prev[id]
-                }));
-            };
 
             const handlePrint = () => {
                 const printWindow = window.open('', '_blank');
@@ -935,15 +950,15 @@
                                     </div>
                                     <div className="card-body">
                                         <h3 className="card-name">{item.name}</h3>
-                                        <p className={`card-description ${expandedDescriptions[item.id] ? 'expanded' : ''}`}>
+                                        <p className="card-description">
                                             {item.description}
                                         </p>
                                         {item.description.length > 60 && (
                                             <button
                                                 className="read-more-btn"
-                                                onClick={() => toggleDescription(item.id)}
+                                                onClick={() => setInfoItem(item)}
                                             >
-                                                {expandedDescriptions[item.id] ? 'Show Less' : 'See More'}
+                                                See More
                                             </button>
                                         )}
                                         <div className="card-footer">
@@ -1026,6 +1041,25 @@
                                         <span>ETB {totalPrice.toFixed(2)}</span>
                                     </div>
                                     <button className="checkout-btn" onClick={() => { handlePrint(); alert('Order Prepared & Sent to Printer!'); setCart([]); setIsModalOpen(false); }}>Prepare Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {infoItem && (
+                        <div className="modal-overlay" onClick={() => setInfoItem(null)}>
+                            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h3>Item Details</h3>
+                                    <button style={{ background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setInfoItem(null)}>&times;</button>
+                                </div>
+                                <div className="desc-modal-content">
+                                    <img src={infoItem.image} alt={infoItem.name} className="desc-modal-img" />
+                                    <h3 className="desc-modal-title">{infoItem.name}</h3>
+                                    <p className="desc-modal-text">{infoItem.description}</p>
+                                    <button className="checkout-btn" onClick={() => { addToCart(infoItem); setInfoItem(null); }}>
+                                        Add to Order - ETB {infoItem.price.toFixed(2)}
+                                    </button>
                                 </div>
                             </div>
                         </div>
