@@ -18,6 +18,12 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- GOOGLE TRANSLATE -->
+    <meta name="google-translate-customization" content="9f84a14d5e2e8e3c-8e4d3c3f9a7a2e3c-g8e9f8e7d6c5b4a3-1">
+    </meta>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <style>
         :root {
             --gold: #c8a84b;
@@ -34,6 +40,47 @@
             --border: rgba(200, 168, 75, 0.2);
             --bg-body: #ffffff;
             --danger: #e63946;
+        }
+
+        /* GOOGLE TRANSLATE CUSTOM STYLES */
+        #google_translate_element {
+            margin-left: 15px;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Inter', sans-serif !important;
+            color: transparent !important;
+        }
+
+        .goog-te-gadget .goog-te-combo {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .goog-te-gadget .goog-te-combo:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+        }
+
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-balloon-frame.skiptranslate,
+        .goog-text-highlight {
+            display: none !important;
+        }
+
+        body {
+            top: 0 !important;
+        }
+
+        .skiptranslate iframe {
+            display: none !important;
         }
 
         * {
@@ -883,18 +930,22 @@
                                 <div className="part-line"></div>
                                 <div className="part-bottom">Nexus Hotel Addis Ababa</div>
                             </div>
-                            <button className="add-to-order-btn" onClick={() => {
-                                const el = document.getElementById('menu');
-                                if (el) {
-                                    const headerHeight = 80;
-                                    window.scrollTo({
-                                        top: el.offsetTop - headerHeight,
-                                        behavior: 'smooth'
-                                    });
-                                }
-                            }}>
-                                Explore Menu
-                            </button>
+
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div id="google_translate_element"></div>
+                                <button className="add-to-order-btn" style={{ marginLeft: '15px' }} onClick={() => {
+                                    const el = document.getElementById('menu');
+                                    if (el) {
+                                        const headerHeight = 80;
+                                        window.scrollTo({
+                                            top: el.offsetTop - headerHeight,
+                                            behavior: 'smooth'
+                                        });
+                                    }
+                                }}>
+                                    Explore Menu
+                                </button>
+                            </div>
                         </div>
                     </header>
 
@@ -1070,6 +1121,14 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
     </script>
 </body>
 
