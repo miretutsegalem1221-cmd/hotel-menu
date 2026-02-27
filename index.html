@@ -1,0 +1,940 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Inn Nexus Hotel – Lobby Bar Menu</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- REACT & BABEL CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        :root {
+            --gold: #c8a84b;
+            --gold-light: #e4c97e;
+            --gold-dark: #9a7a2e;
+            --navy: #0d1b2a;
+            --navy-mid: #1a2e45;
+            --navy-light: #243b55;
+            --cream: #f9f4ec;
+            --white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-muted: #666666;
+            --card-bg: #ffffff;
+            --border: rgba(200, 168, 75, 0.2);
+            --bg-body: #ffffff;
+            --danger: #e63946;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(13, 27, 42, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* LOGO */
+        .custom-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            cursor: pointer;
+            transform: scale(0.65);
+        }
+
+        .custom-logo .part-top {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .custom-logo .part-line {
+            width: 100%;
+            height: 2px;
+            background: var(--danger);
+            margin: 4px 0;
+        }
+
+        .custom-logo .part-bottom {
+            color: white;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* HERO */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(13, 27, 42, 0.7), rgba(13, 27, 42, 0.7)), url('OIP.jfif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-logo-large {
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-logo-large img {
+            width: clamp(100px, 20vw, 180px);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        /* CATEGORY TABS */
+        .tab-container {
+            margin: 40px 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+        }
+
+        .tab-scroll {
+            display: flex;
+            justify-content: start;
+            gap: 12px;
+            min-width: max-content;
+            padding: 0 5px;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: var(--gold);
+            color: var(--navy);
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        /* CARDS */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-img-wrap {
+            position: relative;
+            height: 220px;
+        }
+
+        .card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gold);
+            color: var(--navy);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
+
+        .card-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            min-height: 3.2em;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .card-price {
+            font-weight: 700;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--danger);
+        }
+
+        .add-to-order-btn {
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-to-order-btn:hover {
+            background: var(--gold-dark);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .add-to-order-btn.success {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        /* FLOATING ACTION */
+        .bill-float-btn {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+            transition: all 0.3s;
+        }
+
+        .scroll-top-btn-fixed {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(200, 168, 75, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--navy);
+            animation: plink-plink 2s infinite;
+        }
+
+        @keyframes plink-plink {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(200, 168, 74, 0.6);
+            }
+
+            70% {
+                transform: scale(1.08);
+                box-shadow: 0 0 0 12px rgba(200, 168, 74, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(200, 168, 74, 0);
+            }
+        }
+
+        .scroll-top-btn-fixed:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: var(--gold-light);
+            animation: none;
+        }
+
+        .scroll-top-btn-fixed span:last-child {
+            display: none;
+        }
+
+        .bill-float-btn:hover {
+            transform: scale(1.1);
+            background: #c12a32;
+        }
+
+        .bill-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--gold);
+            color: var(--navy);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            background: var(--navy);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .order-item-price {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .order-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-item-controls button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .order-item-controls .delete-btn {
+            color: var(--danger);
+            border-color: rgba(230, 57, 70, 0.2);
+        }
+
+        .order-item-controls .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal-footer {
+            padding: 25px;
+            background: var(--cream);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--navy);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tax-disclaimer {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        footer {
+            background: var(--navy);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .footer-logo-wrap {
+            display: flex;
+            justify-content: center;
+            transform: scale(0.8);
+            margin-bottom: 30px;
+        }
+
+        .footer-links {
+            margin: 20px 0;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .bill-float-btn {
+                bottom: 100px;
+                right: 20px;
+            }
+
+            .scroll-top-btn-fixed {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #print-receipt,
+            #print-receipt * {
+                visibility: visible;
+            }
+
+            #print-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                color: black;
+                background: white;
+                padding: 20px;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const menuData = [
+            // BREAKFAST
+            { id: 1, name: "Scrambled Eggs", description: "scrambled eggs with tomato, onion, cheese, olive, pepper and toast bread.", price: 380, category: "breakfast", image: "scrambled_eggs.png" },
+            { id: 2, name: "Fried Eggs", description: "Shallow fried eggs sunny side up or turn over or both side, served with toast bread.", price: 400, category: "breakfast", image: "fried_eggs.png" },
+            { id: 3, name: "French Toast", description: "Egg coated slice toast bread served with pan cake syrup.", price: 320, category: "breakfast", image: "french_toast.png" },
+            { id: 4, name: "Spanish Omelet", description: "Fried eggs tomato, onion, mushroom, potatoes, beef ham, cheese, black olives, pepper, spinach and toast bread.", price: 390, category: "breakfast", image: "spanish_omelet.png" },
+            { id: 5, name: "Omelet with your Liking", description: "Eggs tomato, onion mushroom, beef ham, cheese black olives, pepper, toast bread, chicken ham, potatoes, sweet corn and toast bread.", price: 540, category: "breakfast", image: "custom_omelet.png" },
+            { id: 6, name: "Eggs Benedict", description: "Poached eggs with Hollandaise & toast bread.", price: 340, category: "breakfast", image: "https://images.unsplash.com/photo-1600335895229-6e75511ec921?w=500&q=80" },
+            { id: 7, name: "Pan Cake", description: "Plain pan cakes drizzle with strawberry coils & golden syrup.", price: 300, category: "breakfast", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=500&q=80" },
+            { id: 8, name: "Scramble Eggs & Meat", description: "Eggs, beef, tomato, onion, chili, breads, Injera and local butter.", price: 790, category: "breakfast", image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80" },
+            { id: 9, name: "Porridge", description: "Simmered oats with milk.", price: 480, category: "breakfast", image: "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=500&q=80" },
+            { id: 10, name: "Egg Sandwich", description: "Fried Eggs, tomato, chili, bread and onion.", price: 380, category: "breakfast", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&q=80" },
+
+            // COCKTAILS
+            { id: 11, name: "Cosmopolitan", description: "Vodka, triple sec, cranberry juice, and freshly squeezed lime juice.", price: 700, category: "cocktail", image: "https://images.unsplash.com/photo-1597290282695-edc43d0e7129?w=500&q=80" },
+            { id: 12, name: "Piña Colada", description: "White rum, coconut cream, fresh pineapple juice — blended smooth and icy. Tropical bliss.", price: 680, category: "cocktail", image: "https://images.unsplash.com/photo-1560508180-03f285f67ded?w=500&q=80" },
+            { id: 13, name: "Whiskey Sour", description: "Bourbon, lemon juice, sugar, and a dash of egg white for a frothy finish.", price: 750, category: "cocktail", image: "3.PNG" },
+
+            // MOCKTAILS
+            { id: 14, name: "Virgin Sunrise", description: "Orange juice, grenadine, pineapple — layered for a stunning gradient sunrise effect.", price: 320, category: "mocktail", image: "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=500&q=80" },
+            { id: 15, name: "Blue Lagoon", description: "Blue curaçao syrup, lemonade, lime juice, soda — chilled and spectacular to look at.", price: 350, category: "mocktail", image: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=500&q=80" },
+
+            // WINES & SPIRITS
+            { id: 16, name: "Red Wine – Merlot", description: "Smooth full-bodied Italian Merlot, rich plum and cherry notes with a velvety finish.", price: 850, category: "wine", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&q=80" },
+            { id: 17, name: "Scotch Whisky On the Rocks", description: "Aged 12-year single malt Scotch whisky — served over large hand-cut ice cubes.", price: 950, category: "wine", image: "https://images.unsplash.com/photo-1474722883778-792e7990302f?w=500&q=80" },
+
+            // COFFEE & TEA
+            { id: 18, name: "Ethiopian Ceremony Coffee", description: "Authentic Habesha coffee ceremony — roasted Ethiopian beans served with popcorn & incense.", price: 250, category: "coffee", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80" },
+            { id: 19, name: "Signature Cappuccino", description: "Double shot espresso with steamed whole milk, topped with thick microfoam art.", price: 280, category: "coffee", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80" },
+            { id: 20, name: "Premium Matcha Latte", description: "Ceremonial grade Japanese matcha whisked with oat milk, lightly sweetened with honey.", price: 320, category: "coffee", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80" },
+
+            // FRESH JUICES
+            { id: 21, name: "Fresh Mango Juice", description: "Freshly pressed Ethiopian Alphonso mangoes — sweet, vibrant, and naturally nourishing.", price: 280, category: "juice", image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=500&q=80" },
+            { id: 22, name: "Avocado Juice", description: "Creamy Ethiopian avocado blended with honey and a touch of lemon — a local favourite.", price: 320, category: "juice", image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=800&q=80" },
+
+            // FOOD
+            { id: 23, name: "Wood-Fired Margherita Pizza", description: "Classic Napolitana dough, San Marzano tomato, fresh buffalo mozzarella, basil and olive oil.", price: 800, category: "food", image: "https://images.unsplash.com/photo-1604068549290-2d61dbf30ce3?w=500&q=80" },
+            { id: 24, name: "Caesar Salad", description: "Crisp romaine, housemade Caesar dressing, Parmesan shavings, croutons, anchovies on request.", price: 520, category: "food", image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80" },
+            { id: 25, name: "Club Sandwich", description: "Classic triple-decker with chicken, eggs, beef bacon, lettuce, tomato and mayo served with fries.", price: 650, category: "food", image: "5.PNG" },
+            { id: 26, name: "Spicy Tibs", description: "Traditional Ethiopian sautéed beef with onion, garlic, and fresh green chili served with Injera.", price: 720, category: "food", image: "6.PNG" },
+
+            // DESSERT
+            { id: 27, name: "Chocolate Lava Cake", description: "Warm Belgian chocolate molten cake served with vanilla ice cream and raspberry coulis.", price: 450, category: "dessert", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80" }
+        ];
+
+        const { useState, useEffect, useMemo } = React;
+
+        const App = () => {
+            const [activeCategory, setActiveCategory] = useState('all');
+            const [cart, setCart] = useState([]);
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [scrolled, setScrolled] = useState(false);
+            const [recentlyAdded, setRecentlyAdded] = useState(null);
+
+            const categories = [
+                { id: 'all', label: 'All Items', icon: '✨' },
+                { id: 'breakfast', label: 'Breakfast', icon: '🍳' },
+                { id: 'cocktail', label: 'Cocktails', icon: '🍹' },
+                { id: 'mocktail', label: 'Mocktails', icon: '🥤' },
+                { id: 'wine', label: 'Wines & Spirits', icon: '🍷' },
+                { id: 'coffee', label: 'Coffee & Tea', icon: '☕' },
+                { id: 'juice', label: 'Fresh Juices', icon: '🥭' },
+                { id: 'food', label: 'Food & Snacks', icon: '🍽️' },
+                { id: 'dessert', label: 'Desserts', icon: '🍰' },
+            ];
+
+            const filteredItems = useMemo(() => {
+                if (activeCategory === 'all') return menuData;
+                return menuData.filter(item => item.category === activeCategory);
+            }, [activeCategory]);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 100);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const addToCart = (item) => {
+                setCart(prev => {
+                    const existing = prev.find(i => i.id === item.id);
+                    if (existing) return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+                    return [...prev, { ...item, quantity: 1 }];
+                });
+
+                setRecentlyAdded(item.id);
+                setTimeout(() => setRecentlyAdded(null), 1500);
+            };
+
+            const updateQty = (id, delta) => {
+                setCart(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i));
+            };
+
+            const removeItem = (id) => setCart(prev => prev.filter(i => i.id !== id));
+
+            const handlePrint = () => {
+                const printWindow = window.open('', '_blank');
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const vat = subtotal * 0.15;
+                const serviceCharge = subtotal * 0.10;
+                const grandTotal = subtotal + vat + serviceCharge;
+
+                const receiptContent = `
+                    <html>
+                        <head>
+                            <title>Swiss Inn Nexus - Receipt</title>
+                            <style>
+                                body { font-family: 'Courier New', Courier, monospace; padding: 20px; width: 300px; margin: 0 auto; color: #000; }
+                                .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+                                .hotel-name { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; }
+                                .item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                                .divider { border-top: 1px dashed #000; margin: 10px 0; }
+                                .total-section { font-weight: bold; }
+                                .footer { text-align: center; margin-top: 30px; font-size: 0.8rem; }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="header">
+                                <div class="hotel-name">Swiss Inn Nexus</div>
+                                <div>Lobby Bar Menu</div>
+                                <div>Date: ${new Date().toLocaleString()}</div>
+                            </div>
+                            ${cart.map(item => `
+                                <div class="item-row">
+                                    <span>${item.quantity}x ${item.name}</span>
+                                    <span>ETB ${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                            <div class="divider"></div>
+                            <div class="item-row">
+                                <span>Subtotal:</span>
+                                <span>ETB ${subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="item-row">
+                                <span>VAT (15%):</span>
+                                <span>ETB ${vat.toFixed(2)}</span>
+                            </div>
+                            <div class="item-row">
+                                <span>Service Charge (10%):</span>
+                                <span>ETB ${serviceCharge.toFixed(2)}</span>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item-row total-section">
+                                <span>GRAND TOTAL:</span>
+                                <span>ETB ${grandTotal.toFixed(2)}</span>
+                            </div>
+                            <div class="footer">
+                                Thank you for visiting!<br>
+                                Nexus Hotel Addis Ababa
+                            </div>
+                            <script>
+                                window.onload = () => {
+                                    window.print();
+                                    window.close();
+                                };
+                            <\/script>
+                        </body>
+                    </html>
+                `;
+
+                printWindow.document.write(receiptContent);
+                printWindow.document.close();
+            };
+
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+
+            return (
+                <div className="app-root">
+                    <header className={`sticky-header ${scrolled ? 'scrolled' : ''}`}>
+                        <div className="container header-inner">
+                            <div className="custom-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                                <div className="part-top">Swiss Inn</div>
+                                <div className="part-line"></div>
+                                <div className="part-bottom">Nexus Hotel Addis Ababa</div>
+                            </div>
+                            <button className="add-to-order-btn" onClick={() => {
+                                const el = document.getElementById('menu');
+                                if (el) {
+                                    const headerHeight = 80;
+                                    window.scrollTo({
+                                        top: el.offsetTop - headerHeight,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            }}>
+                                Explore Menu
+                            </button>
+                        </div>
+                    </header>
+
+                    <section className="hero">
+                        <div className="container">
+                            <div className="hero-logo-large">
+                                <img src="Swiss%20Inn%20Nexus-Logo%20for%20Email.png" alt="Logo" />
+                            </div>
+                            <h1 className="hero-title">Nexus Lobby Bar</h1>
+                            <p className="hero-subtitle">Premium Selections & International Flavours</p>
+                            <button className="add-to-order-btn" style={{ padding: '15px 40px', fontSize: '1rem' }} onClick={() => {
+                                const el = document.getElementById('menu');
+                                if (el) {
+                                    const headerHeight = 80;
+                                    window.scrollTo({
+                                        top: el.offsetTop - headerHeight,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            }}>
+                                View Menu ↓
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="menu" className="container section" style={{ paddingTop: '80px' }}>
+                        <div className="section-header">
+                            <span className="section-label">Curated Selection</span>
+                            <h2 className="section-title">Our Menu</h2>
+                            <div className="section-divider"></div>
+                        </div>
+
+                        <div className="tab-container">
+                            <div className="tab-scroll">
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        className={`tab-btn ${activeCategory === cat.id ? 'active' : ''}`}
+                                        onClick={() => setActiveCategory(cat.id)}
+                                    >
+                                        <span>{cat.icon}</span> {cat.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="menu-grid">
+                            {filteredItems.map(item => (
+                                <div key={item.id} className="menu-card fade-in-up">
+                                    <div className="card-img-wrap">
+                                        <img src={item.image} alt={item.name} />
+                                        <div className="card-badge">{categories.find(c => c.id === item.category)?.label}</div>
+                                    </div>
+                                    <div className="card-body">
+                                        <h3 className="card-name">{item.name}</h3>
+                                        <p className="card-description">{item.description}</p>
+                                        <div className="card-footer">
+                                            <div className="card-price">ETB {item.price.toFixed(2)}</div>
+                                            <button
+                                                className={`add-to-order-btn ${recentlyAdded === item.id ? 'success' : ''}`}
+                                                onClick={() => addToCart(item)}
+                                            >
+                                                {recentlyAdded === item.id ? '✓ Added' : '+ Add'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {activeCategory === 'breakfast' && (
+                                <div className="tax-disclaimer">Prices include 15% VAT and 10% Service Charge</div>
+                            )}
+                        </div>
+                    </section>
+
+                    <footer className="footer">
+                        <div className="container">
+                            <div className="footer-logo-wrap">
+                                <div className="custom-logo">
+                                    <div className="part-top">Swiss Inn</div>
+                                    <div className="part-line"></div>
+                                    <div className="part-bottom">Nexus Hotel Addis Ababa</div>
+                                </div>
+                            </div>
+                            <div className="footer-links">
+                                <a href="#">📍 Addis Ababa</a>
+                                <a href="#">📞 +251 11 000 0000</a>
+                            </div>
+                            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© 2025 Swiss Inn Nexus Hotel. All rights reserved.</p>
+                        </div>
+                    </footer>
+
+                    {totalItems > 0 && (
+                        <button className="bill-float-btn" onClick={() => setIsModalOpen(true)}>
+                            🧾 <span className="bill-badge">{totalItems}</span>
+                        </button>
+                    )}
+
+                    {scrolled && (
+                        <button
+                            className="scroll-top-btn-fixed fade-in"
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        >
+                            <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>↑</span>
+                            <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: '700' }}>Top</span>
+                        </button>
+                    )}
+
+                    {isModalOpen && (
+                        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+                            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h3>Order Summary</h3>
+                                    <button style={{ background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setIsModalOpen(false)}>&times;</button>
+                                </div>
+                                <div className="modal-body">
+                                    {cart.map(item => (
+                                        <div key={item.id} className="order-item">
+                                            <div>
+                                                <div className="order-item-name">{item.name}</div>
+                                                <div className="order-item-price">ETB {item.price.toFixed(2)}</div>
+                                            </div>
+                                            <div className="order-item-controls">
+                                                <button onClick={() => updateQty(item.id, -1)}>-</button>
+                                                <span>{item.quantity}</span>
+                                                <button onClick={() => updateQty(item.id, 1)}>+</button>
+                                                <button className="delete-btn" onClick={() => removeItem(item.id)}>🗑️</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="modal-footer">
+                                    <div className="total-row">
+                                        <span>Total</span>
+                                        <span>ETB {totalPrice.toFixed(2)}</span>
+                                    </div>
+                                    <button className="checkout-btn" onClick={() => { handlePrint(); alert('Order Prepared & Sent to Printer!'); setCart([]); setIsModalOpen(false); }}>Prepare Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
