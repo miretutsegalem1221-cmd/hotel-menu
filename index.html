@@ -18,12 +18,6 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- GOOGLE TRANSLATE -->
-    <meta name="google-translate-customization" content="9f84a14d5e2e8e3c-8e4d3c3f9a7a2e3c-g8e9f8e7d6c5b4a3-1">
-    </meta>
-    <script type="text/javascript"
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
     <style>
         :root {
             --gold: #c8a84b;
@@ -42,78 +36,117 @@
             --danger: #e63946;
         }
 
-        /* GOOGLE TRANSLATE CUSTOM STYLES */
-        #google_translate_element {
-            margin-left: 15px;
+        .lang-selector {
+            position: relative;
+            margin-right: 15px;
         }
 
-        .goog-te-gadget {
-            font-family: 'Inter', sans-serif !important;
-            color: transparent !important;
-        }
-
-        .goog-te-gadget .goog-te-combo {
+        .lang-dropdown-btn {
             background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            border: 1px solid var(--border);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            outline: none;
+            padding: 8px 12px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .goog-te-gadget .goog-te-combo:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: var(--gold);
-        }
-
-        /* TABLE SELECTOR STYLES */
-        .table-selector-wrap {
-            margin-left: 15px;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
-        .table-select {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid var(--border);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .table-select:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .lang-dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
             border-color: var(--gold);
         }
 
-        .table-select option {
-            background: var(--navy-mid);
-            color: white;
+        .lang-dropdown-list {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--navy);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 8px;
+            min-width: 160px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .goog-te-banner-frame.skiptranslate,
-        .goog-te-balloon-frame.skiptranslate,
-        .goog-text-highlight {
-            display: none !important;
+        .lang-dropdown-list.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .lang-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .lang-item:hover {
+            background: rgba(200, 168, 75, 0.15);
+            color: var(--gold-light);
+        }
+
+        .lang-item.active {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .lang-flag-img {
+            width: 20px;
+            height: 15px;
+            object-fit: cover;
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-flag {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 600px) {
+            .lang-selector {
+                margin-right: 8px;
+            }
+
+            .lang-dropdown-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                gap: 5px;
+            }
+
+            .lang-flag-img {
+                width: 16px;
+                height: 12px;
+            }
+
+            .lang-dropdown-list {
+                right: -10px;
+                max-width: calc(100vw - 20px);
+            }
         }
 
         body {
             top: 0 !important;
-        }
-
-        .skiptranslate iframe {
-            display: none !important;
         }
 
         * {
@@ -752,6 +785,30 @@
                 width: 45px;
                 height: 45px;
             }
+
+            .tab-container {
+                margin: 15px 0;
+            }
+
+            .tab-scroll {
+                gap: 4px;
+                padding: 0 5px;
+            }
+
+            .tab-btn {
+                padding: 6px 10px;
+                font-size: 0.72rem;
+                gap: 4px;
+                white-space: nowrap;
+            }
+
+            .tab-btn span {
+                font-size: 1rem;
+            }
+
+            .tab-btn.active {
+                transform: scale(1.02);
+            }
         }
 
         /* PRINT STYLES */
@@ -787,83 +844,558 @@
     <div id="root"></div>
 
     <script type="text/babel">
+        const translations = {
+            en: {
+                heroTitle: "Nexus Lobby Bar",
+                heroSubtitle: "Premium Selections & International Flavours",
+                exploreMenu: "Explore Menu",
+                viewMenu: "View Menu ↓",
+                curatedSelection: "Curated Selection",
+                ourMenu: "Our Menu",
+                seeMore: "See More",
+                itemDetails: "Item Details",
+                addToOrder: "Add to Order",
+                orderSummary: "Order Summary",
+                tableNumber: "Table Number / Location",
+                total: "Total",
+                subtotal: "Subtotal",
+                vat: "VAT (15%)",
+                serviceCharge: "Service Charge (10%)",
+                grandTotal: "GRAND TOTAL",
+                prepareOrder: "Prepare Order",
+                thankYou: "Thank you for visiting!",
+                nexusAddis: "Nexus Hotel Addis Ababa",
+                taxDisclaimer: "Prices include 15% VAT and 10% Service Charge",
+                added: "✓ Added",
+                add: "+ Add",
+                top: "Top",
+                all: "All Items",
+                breakfast: "Breakfast",
+                cocktail: "Cocktails",
+                mocktail: "Mocktails",
+                wine: "Wines & Spirits",
+                coffee: "Coffee & Tea",
+                juice: "Fresh Juices",
+                food: "Food & Snacks",
+                dessert: "Desserts"
+            },
+            am: {
+                heroTitle: "ኔክሰስ ሎቢ ባር",
+                heroSubtitle: "ፕሪሚየም ምርጫዎች እና ዓለም አቀፍ ጣዕሞች",
+                exploreMenu: "ሜኑውን ይቃኙ",
+                viewMenu: "ሜኑውን ይመልከቱ ↓",
+                curatedSelection: "የተመረጡ ምርጫዎች",
+                ourMenu: "የእኛ ሜኑ",
+                seeMore: "ተጨማሪ ይመልከቱ",
+                itemDetails: "የምርት ዝርዝሮች",
+                addToOrder: "ወደ ትዕዛዝ ያክሉ",
+                orderSummary: "የትዕዛዝ ማጠቃለያ",
+                tableNumber: "የጠረጴዛ ቁጥር / ቦታ",
+                total: "ጠቅላላ",
+                subtotal: "ንዑስ ድምር",
+                vat: "ተጨማሪ እሴት ታክስ (15%)",
+                serviceCharge: "የአገልግሎት ክፍያ (10%)",
+                grandTotal: "ጠቅላላ ድምር",
+                prepareOrder: "ትዕዛዝ ያዘጋጁ",
+                thankYou: "ስለጎበኙን እናመሰግናለን!",
+                nexusAddis: "ኔክሰስ ሆቴል አዲስ አበባ",
+                taxDisclaimer: "ዋጋዎች 15% የተጨማሪ እሴት ታክስ እና 10% የአገልግሎት ክፍያን ያካትታሉ",
+                added: "✓ ታክሏል",
+                add: "+ አክል",
+                top: "ላይ",
+                all: "ሁሉም",
+                breakfast: "ቁርስ",
+                cocktail: "ኮክቴል",
+                mocktail: "ሞክቴል",
+                wine: "ወይን እና መናፍስት",
+                coffee: "ቡና እና ሻይ",
+                juice: "ጭማቂ",
+                food: "ምግብ",
+                dessert: "ጣፋጭ"
+            },
+            fr: {
+                heroTitle: "Bar du Hall Nexus",
+                heroSubtitle: "Sélections Premium et Saveurs Internationales",
+                exploreMenu: "Explorer le menu",
+                viewMenu: "Voir le menu ↓",
+                curatedSelection: "Sélection organisée",
+                ourMenu: "Notre Menu",
+                seeMore: "Voir plus",
+                itemDetails: "Détails de l'article",
+                addToOrder: "Ajouter à la commande",
+                orderSummary: "Récapitulatif de la commande",
+                tableNumber: "Numéro de table / Emplacement",
+                total: "Total",
+                subtotal: "Sous-total",
+                vat: "TVA (15%)",
+                serviceCharge: "Frais de service (10%)",
+                grandTotal: "TOTAL GÉNÉRAL",
+                prepareOrder: "Préparer la commande",
+                thankYou: "Merci de votre visite!",
+                nexusAddis: "Hôtel Nexus Addis-Abeba",
+                taxDisclaimer: "Les prix incluent 15% de TVA et 10% de frais de service",
+                added: "✓ Ajouté",
+                add: "+ Ajouter",
+                top: "Haut",
+                all: "Tous",
+                breakfast: "Petit déjeuner",
+                cocktail: "Cocktails",
+                mocktail: "Mocktails",
+                wine: "Vins et spiritueux",
+                coffee: "Café et thé",
+                juice: "Jus frais",
+                food: "Nourriture",
+                dessert: "Desserts"
+            },
+            zh: {
+                heroTitle: "Nexus 大堂吧",
+                heroSubtitle: "优质精选与国际风味",
+                exploreMenu: "浏览菜单",
+                viewMenu: "查看菜单 ↓",
+                curatedSelection: "精选系列",
+                ourMenu: "我们的菜单",
+                seeMore: "查看更多",
+                itemDetails: "项目详情",
+                addToOrder: "添加到订单",
+                orderSummary: "订单摘要",
+                tableNumber: "桌号 / 地点",
+                total: "总计",
+                subtotal: "小计",
+                vat: "增值税 (15%)",
+                serviceCharge: "服务费 (10%)",
+                grandTotal: "总计",
+                prepareOrder: "准备订单",
+                thankYou: "感谢您的光临！",
+                nexusAddis: "亚的斯亚贝巴 纳克萨斯 酒店",
+                taxDisclaimer: "价格已含 15% 增值税和 10% 服务费",
+                added: "✓ 已添加",
+                add: "+ 添加",
+                top: "顶部",
+                all: "所有项目",
+                breakfast: "早餐",
+                cocktail: "鸡尾酒",
+                mocktail: "无酒精鸡尾酒",
+                wine: "葡萄酒与烈酒",
+                coffee: "咖啡与茶",
+                juice: "鲜榨果汁",
+                food: "食物与小吃",
+                dessert: "甜点"
+            },
+            ar: {
+                heroTitle: "بار اللوبي نكسس",
+                heroSubtitle: "اختيارات فاخرة ونكهات عالمية",
+                exploreMenu: "استكشف القائمة",
+                viewMenu: "عرض القائمة ↓",
+                curatedSelection: "اختياراتنا المختارة",
+                ourMenu: "قائمتنا",
+                seeMore: "عرض المزيد",
+                itemDetails: "تفاصيل العنصر",
+                addToOrder: "إضافة إلى الطلب",
+                orderSummary: "ملخص الطلب",
+                tableNumber: "رقم الطاولة / الموقع",
+                total: "الإجمالي",
+                subtotal: "المجموع الفرعي",
+                vat: "ضريبة القيمة المضافة (15٪)",
+                serviceCharge: "رسم الخدمة (10٪)",
+                grandTotal: "المجموع الكلي",
+                prepareOrder: "تحضير الطلب",
+                thankYou: "شكراً لزيارتكم!",
+                nexusAddis: "فندق نكسس أديس أبابا",
+                taxDisclaimer: "الأسعار تشمل 15٪ ضريبة القيمة المضافة و 10٪ رسوم الخدمة",
+                added: "✓ تم الإضافة",
+                add: "+ إضافة",
+                top: "أعلى",
+                all: "كل الأصناف",
+                breakfast: "إفطار",
+                cocktail: "كوكتيلات",
+                mocktail: "موكتيلات",
+                wine: "نبيذ ومشروبات روحية",
+                coffee: "قهوة وشاي",
+                juice: "عصائر طازجة",
+                food: "طعام ووجبات خفيفة",
+                dessert: "حلويات"
+            }
+        };
+
         const menuData = [
             // BREAKFAST
-            { id: 1, name: "Scrambled Eggs", description: "scrambled eggs with tomato, onion, cheese, olive, pepper and toast bread.", price: 380, category: "breakfast", image: "scrambled_eggs.png" },
-            { id: 2, name: "Fried Eggs", description: "Shallow fried eggs sunny side up or turn over or both side, served with toast bread.", price: 400, category: "breakfast", image: "fried_eggs.png" },
-            { id: 3, name: "French Toast", description: "Egg coated slice toast bread served with pan cake syrup.", price: 320, category: "breakfast", image: "french_toast.png" },
-            { id: 4, name: "Spanish Omelet", description: "Fried eggs tomato, onion, mushroom, potatoes, beef ham, cheese, black olives, pepper, spinach and toast bread.", price: 390, category: "breakfast", image: "spanish_omelet.png" },
-            { id: 5, name: "Omelet with your Liking", description: "Eggs tomato, onion mushroom, beef ham, cheese black olives, pepper, toast bread, chicken ham, potatoes, sweet corn and toast bread.", price: 540, category: "breakfast", image: "custom_omelet.png" },
-            { id: 6, name: "Eggs Benedict", description: "Poached eggs with Hollandaise & toast bread.", price: 340, category: "breakfast", image: "https://images.unsplash.com/photo-1600335895229-6e75511ec921?w=500&q=80" },
-            { id: 7, name: "Pan Cake", description: "Plain pan cakes drizzle with strawberry coils & golden syrup.", price: 300, category: "breakfast", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=500&q=80" },
-            { id: 8, name: "Scramble Eggs & Meat", description: "Eggs, beef, tomato, onion, chili, breads, Injera and local butter.", price: 790, category: "breakfast", image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80" },
-            { id: 9, name: "Porridge", description: "Simmered oats with milk.", price: 480, category: "breakfast", image: "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=500&q=80" },
-            { id: 10, name: "Egg Sandwich", description: "Fried Eggs, tomato, chili, bread and onion.", price: 380, category: "breakfast", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&q=80" },
+            {
+                id: 1,
+                price: 380,
+                category: "breakfast",
+                image: "scrambled_eggs.png",
+                en: { name: "Scrambled Eggs", description: "scrambled eggs with tomato, onion, cheese, olive, pepper and toast bread." },
+                am: { name: "የተጠበሰ እንቁላል", description: "የተጠበሰ እንቁላል ከቲማቲም፣ ቀይ ሽንኩርት፣ አይብ፣ የወይራ ፍሬ፣ ቃሪያ እና ቶስት ዳቦ ጋር።" },
+                fr: { name: "Œufs brouillés", description: "Œufs brouillés avec tomate, oignon, fromage, olives, poivron et pain grillé." },
+                zh: { name: "炒鸡蛋", description: "炒鸡蛋配番茄、洋葱、芝士、橄榄、辣椒和烤面包。" },
+                ar: { name: "بيض مخفوق", description: "بيض مخفوق مع الطماطم والبصل والجبن والزيتون والفلفل وخبز التوست." }
+            },
+            {
+                id: 2,
+                price: 400,
+                category: "breakfast",
+                image: "fried_eggs.png",
+                en: { name: "Fried Eggs", description: "Shallow fried eggs sunny side up or turn over or both side, served with toast bread." },
+                am: { name: "ፍራይድ እንቁላል", description: "በጥልቀት ያልተጠበሰ እንቁላል (ሰኒ ሳይድ አፕ ወይም ተርን ኦቨር) ከቶስት ዳቦ ጋር።" },
+                fr: { name: "Œufs au plat", description: "Œufs frits, servis avec du pain grillé." },
+                zh: { name: "煎鸡蛋", description: "浅煎鸡蛋，配烤面包。" },
+                ar: { name: "بيض مقلي", description: "بيض مقلي يقدم مع خبز التوست." }
+            },
+            {
+                id: 3,
+                price: 320,
+                category: "breakfast",
+                image: "french_toast.png",
+                en: { name: "French Toast", description: "Egg coated slice toast bread served with pan cake syrup." },
+                am: { name: "የፈረንሳይ ቶስት", description: "በእንቁላል የተለወሰ ቶስት ዳቦ በሲረፕ የታጀበ።" },
+                fr: { name: "Pain perdu", description: "Tranches de pain trempées dans l'œuf et frites, servies avec du sirop." },
+                zh: { name: "法式吐司", description: "蛋液裹满的面包片，配糖浆。" },
+                ar: { name: "توست فرنسي", description: "شريحة توست مغطاة بالبيض تقدم مع شراب البان كيك." }
+            },
+            {
+                id: 4,
+                price: 390,
+                category: "breakfast",
+                image: "spanish_omelet.png",
+                en: { name: "Spanish Omelet", description: "Fried eggs tomato, onion, mushroom, potatoes, beef ham, cheese, black olives, pepper, spinach and toast bread." },
+                am: { name: "የስፔን ኦሜሌት", description: "እንቁላል ከቲማቲም፣ ቀይ ሽንኩርት፣ እንጉዳይ፣ ድንች፣ የበሬ ስጋ ሃም፣ አይብ፣ የወይራ ፍሬ፣ ቃሪያ፣ ስፒናች እና ቶስት ዳቦ ጋር።" },
+                fr: { name: "Omelette espagnole", description: "Omelette avec tomate, oignon, champignons, pommes de terre, jambon de bœuf, fromage, olives noires, poivron, épinards et pain grillé." },
+                zh: { name: "西班牙煎蛋卷", description: "鸡蛋配番茄、洋葱、蘑菇、土豆、牛肉火腿、芝士、黑橄榄、辣椒、波菜和烤面包。" },
+                ar: { name: "أومليت إسباني", description: "أومليت مع الطماطم والبصل والمشروم والبطاطس ولحم البقر والجبن والزيتون الأسود والفلفل والسبانخ وخبز التوست." }
+            },
+            {
+                id: 5,
+                price: 540,
+                category: "breakfast",
+                image: "custom_omelet.png",
+                en: { name: "Omelet with your Liking", description: "Eggs tomato, onion mushroom, beef ham, cheese black olives, pepper, toast bread, chicken ham, potatoes, sweet corn and toast bread." },
+                am: { name: "የፈለጉት ኦሜሌት", description: "እንቁላል ከቲማቲም፣ ቀይ ሽንኩርት፣ እንጉዳይ፣ የበሬ ስጋ ሃም፣ አይብ፣ የወይራ ፍሬ፣ ቃሪያ፣ ቶስት ዳቦ፣ የዶሮ ሃም፣ ድንች፣ በቆሎ ጋር።" },
+                fr: { name: "Omelette à votre goût", description: "Omelette avec votre choix d'ingrédients : tomate, oignon, champignons, jambon, fromage, olives, maïs, etc." },
+                zh: { name: "自选煎蛋卷", description: "根据您的喜好添加番茄、洋葱、蘑菇、牛肉火腿、芝士、黑橄榄、辣椒、烤面包、鸡肉火腿、土豆、甜玉米。" },
+                ar: { name: "أومليت حسب اختيارك", description: "أومليت مع الطماطم والبصل والمشروم ولحم البقر والجبن والزيتون والفلفل وخبز التوست ولحم الدجاج والبطاطس والذرة." }
+            },
+            {
+                id: 6,
+                price: 340,
+                category: "breakfast",
+                image: "https://images.unsplash.com/photo-1600335895229-6e75511ec921?w=500&q=80",
+                en: { name: "Eggs Benedict", description: "Poached eggs with Hollandaise & toast bread." },
+                am: { name: "እንቁላል ቤኔዲክት", description: "የተቀቀለ እንቁላል በሆላንዳይዝ ሶስ እና ቶስት ዳቦ የታጀበ።" },
+                fr: { name: "Œufs Bénédicte", description: "Œufs pochés avec sauce hollandaise et pain grillé." },
+                zh: { name: "班尼迪克蛋", description: "水煮蛋配荷兰酱和烤面包。" },
+                ar: { name: "بيض بنديكت", description: "بيض مسلوق مع صوص هولانديز وخبز توست." }
+            },
+            {
+                id: 7,
+                price: 300,
+                category: "breakfast",
+                image: "https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=500&q=80",
+                en: { name: "Pan Cake", description: "Plain pan cakes drizzle with strawberry coils & golden syrup." },
+                am: { name: "ፓን ኬክ", description: "ተራ ፓን ኬክ በስትሮውቤሪ እና በጎልደን ሲረፕ የታጀበ።" },
+                fr: { name: "Pancakes", description: "Pancakes nature nappés de fraises et de sirop doré." },
+                zh: { name: "煎饼", description: "原味煎饼，点缀草莓和金糖浆。" },
+                ar: { name: "بان كيك", description: "بان كيك سادة مع قطع الفراولة والشراب الذهبي." }
+            },
+            {
+                id: 8,
+                price: 790,
+                category: "breakfast",
+                image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&q=80",
+                en: { name: "Scramble Eggs & Meat", description: "Eggs, beef, tomato, onion, chili, breads, Injera and local butter." },
+                am: { name: "የተጠበሰ እንቁላል ከስጋ ጋር", description: "እንቁላል፣ የበሬ ስጋ፣ ቲማቲም፣ ቀይ ሽንኩርት፣ ቃሪያ፣ ዳቦ፣ እንጀራ እና የሀገር ባህል ቅቤ።" },
+                fr: { name: "Œufs brouillés et viande", description: "Œufs, bœuf, tomate, oignon, piment, pains, Injera et beurre local." },
+                zh: { name: "炒蛋配肉", description: "鸡蛋、牛肉、西红柿、洋葱、辣椒、面包、英吉拉和当地黄油。" },
+                ar: { name: "بيض مخفوق مع اللحم", description: "بيض، لحم بقر، طماطم، بصل، فلفل حار، خبز، إنجيرا وزبدة محلية." }
+            },
+            {
+                id: 9,
+                price: 480,
+                category: "breakfast",
+                image: "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=500&q=80",
+                en: { name: "Porridge", description: "Simmered oats with milk." },
+                am: { name: "ገንፎ", description: "የአጃ ገንፎ በወተት የተሰራ።" },
+                fr: { name: "Porridge", description: "Flocons d'avoine mijotés au lait." },
+                zh: { name: "粥", description: "牛奶炖燕麦。" },
+                ar: { name: "عصيدة", description: "شوفان مطبوخ مع الحليب." }
+            },
+            {
+                id: 10,
+                price: 380,
+                category: "breakfast",
+                image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&q=80",
+                en: { name: "Egg Sandwich", description: "Fried Eggs, tomato, chili, bread and onion." },
+                am: { name: "የእንቁላል ሳንድዊች", description: "የተጠበሰ እንቁላል፣ ቲማቲም፣ ቃሪያ፣ ዳቦ እና ቀይ ሽንኩርት።" },
+                fr: { name: "Sandwich aux œufs", description: "Œufs au plat, tomate, piment, pain et oignon." },
+                zh: { name: "鸡蛋三明治", description: "煎蛋、西红柿、辣椒、面包和洋葱。" },
+                ar: { name: "ساندويتش بيض", description: "بيض مقلي، طماطم، فلفل حار، خبز وبصل." }
+            },
 
             // COCKTAILS
-            { id: 11, name: "Cosmopolitan", description: "Vodka, triple sec, cranberry juice, and freshly squeezed lime juice.", price: 700, category: "cocktail", image: "https://images.unsplash.com/photo-1597290282695-edc43d0e7129?w=500&q=80" },
-            { id: 12, name: "Piña Colada", description: "White rum, coconut cream, fresh pineapple juice — blended smooth and icy. Tropical bliss.", price: 680, category: "cocktail", image: "https://images.unsplash.com/photo-1560508180-03f285f67ded?w=500&q=80" },
-            { id: 13, name: "Whiskey Sour", description: "Bourbon, lemon juice, sugar, and a dash of egg white for a frothy finish.", price: 750, category: "cocktail", image: "3.PNG" },
+            {
+                id: 11,
+                price: 700,
+                category: "cocktail",
+                image: "https://images.unsplash.com/photo-1597290282695-edc43d0e7129?w=500&q=80",
+                en: { name: "Cosmopolitan", description: "Vodka, triple sec, cranberry juice, and freshly squeezed lime juice." },
+                am: { name: "ኮስሞፖሊታን", description: "ቮድካ፣ ትሪፕል ሴክ፣ የክራንቤሪ ጭማቂ እና የሎሚ ጭማቂ።" },
+                fr: { name: "Cosmopolitan", description: "Vodka, triple sec, jus de canneberge et jus de citron vert frais." },
+                zh: { name: "大都会", description: "伏特加、橙味利口酒、蔓越莓汁和新鲜青柠汁。" },
+                ar: { name: "كوزموبوليتان", description: "فودكا، تريبل سيك، عصير كرانبيري، وعصير ليمون طازج." }
+            },
+            {
+                id: 12,
+                price: 680,
+                category: "cocktail",
+                image: "https://images.unsplash.com/photo-1560508180-03f285f67ded?w=500&q=80",
+                en: { name: "Piña Colada", description: "White rum, coconut cream, fresh pineapple juice — blended smooth and icy. Tropical bliss." },
+                am: { name: "ፒና ኮላዳ", description: "ነጭ ረም፣ የኮኮናት ክሬም፣ ትኩስ አናናስ ጭማቂ - በረዶ የተደረገበት።" },
+                fr: { name: "Piña Colada", description: "Rhum blanc, crème de coco, jus d'ananas frais — mélangé onctueusement et glacé." },
+                zh: { name: "椰林飘香", description: "白朗姆酒、椰浆、新鲜菠萝汁——口感顺滑且冰凉。" },
+                ar: { name: "بينا كولادا", description: "روم أبيض، كريم جوز الهند، عصير أناناس طازج - ممزوج بسلاسة ومثلج." }
+            },
+            {
+                id: 13,
+                price: 750,
+                category: "cocktail",
+                image: "3.PNG",
+                en: { name: "Whiskey Sour", description: "Bourbon, lemon juice, sugar, and a dash of egg white for a frothy finish." },
+                am: { name: "ዊስኪ ሳወር", description: "ቦርበን፣ የሎሚ ጭማቂ፣ ስኳር እና ትንሽ የእንቁላል ነጭ።" },
+                fr: { name: "Whiskey Sour", description: "Bourbon, jus de citron, sucre et un trait de blanc d'œuf pour une finition mousseuse." },
+                zh: { name: "威士忌酸", description: "波本威士忌、柠檬汁、糖和少许蛋清，带来泡沫感。" },
+                ar: { name: "ويسكي ساور", description: "بوربون، عصير ليمون، سكر، وكمية قليلة من بياض البيض للحصول على رغوة." }
+            },
 
             // MOCKTAILS
-            { id: 14, name: "Virgin Sunrise", description: "Orange juice, grenadine, pineapple — layered for a stunning gradient sunrise effect.", price: 320, category: "mocktail", image: "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=500&q=80" },
-            { id: 15, name: "Blue Lagoon", description: "Blue curaçao syrup, lemonade, lime juice, soda — chilled and spectacular to look at.", price: 350, category: "mocktail", image: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=500&q=80" },
+            {
+                id: 14,
+                price: 320,
+                category: "mocktail",
+                image: "https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=500&q=80",
+                en: { name: "Virgin Sunrise", description: "Orange juice, grenadine, pineapple — layered for a stunning gradient sunrise effect." },
+                am: { name: "ቨርጂን ሰንራይዝ", description: "የብርቱካን ጭማቂ፣ ግሬናዲን፣ አናናስ - የፀሐይ መውጫ ቀለም ያለው።" },
+                fr: { name: "Virgin Sunrise", description: "Jus d'orange, grenadine, ananas — étagé pour un superbe effet de lever de soleil dégradé." },
+                zh: { name: "处女日出", description: "橙汁、红石榴糖浆、菠萝——层叠出迷人的日出渐变效果。" },
+                ar: { name: "فيرجن صن رايز", description: "عصير برتقال، غرينادين، أناناس - طبقات تعطي تأثير شروق الشمس المذهل." }
+            },
+            {
+                id: 15,
+                price: 350,
+                category: "mocktail",
+                image: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=500&q=80",
+                en: { name: "Blue Lagoon", description: "Blue curaçao syrup, lemonade, lime juice, soda — chilled and spectacular to look at." },
+                am: { name: "ብሉ ላጉን", description: "ብሉ ኩራካዎ ሲረፕ፣ ለሞኔድ፣ የሎሚ ጭማቂ፣ ሶዳ - ቀዝቃዛ እና ማራኪ።" },
+                fr: { name: "Blue Lagoon", description: "Sirop de curaçao bleu, limonade, jus de citron vert, soda — glacé et spectaculaire." },
+                zh: { name: "蓝海", description: "蓝柑糖浆、柠檬汽水、青柠汁、苏打水——冰凉且视觉效果极佳。" },
+                ar: { name: "بلو لاغون", description: "شراب بلو كوراساو، ليمونادة، عصير ليمون، صودا - مثلج ومذهل للنظر." }
+            },
 
             // WINES & SPIRITS
-            { id: 16, name: "Red Wine – Merlot", description: "Smooth full-bodied Italian Merlot, rich plum and cherry notes with a velvety finish.", price: 850, category: "wine", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&q=80" },
-            { id: 17, name: "Scotch Whisky On the Rocks", description: "Aged 12-year single malt Scotch whisky — served over large hand-cut ice cubes.", price: 950, category: "wine", image: "https://images.unsplash.com/photo-1474722883778-792e7990302f?w=500&q=80" },
+            {
+                id: 16,
+                price: 850,
+                category: "wine",
+                image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&q=80",
+                en: { name: "Red Wine – Merlot", description: "Smooth full-bodied Italian Merlot, rich plum and cherry notes with a velvety finish." },
+                am: { name: "ቀይ ወይን – ሜርሎት", description: "ጥቁር ፕለም እና ቼሪ ጣዕም ያለው የጣሊያን ሜርሎት።" },
+                fr: { name: "Vin Rouge – Merlot", description: "Merlot italien corsé et lisse, riches notes de prune et de cerise avec une fin veloutée." },
+                zh: { name: "红葡萄酒 – 梅洛", description: "口感顺滑、酒体丰满的意大利梅洛，带有浓郁的李子和樱桃香气。" },
+                ar: { name: "نبيذ أحمر – ميرلو", description: "ميرلو إيطالي ناعم وكامل القوام، نكهات البرقوق والكرز الغنية مع خاتمة مخملية." }
+            },
+            {
+                id: 17,
+                price: 950,
+                category: "wine",
+                image: "https://images.unsplash.com/photo-1474722883778-792e7990302f?w=500&q=80",
+                en: { name: "Scotch Whisky On the Rocks", description: "Aged 12-year single malt Scotch whisky — served over large hand-cut ice cubes." },
+                am: { name: "ስኮች ዊስኪ", description: "12 አመት የቆየ ስኮች ዊስኪ - በትላልቅ የበረዶ ኩቦች የቀረበ።" },
+                fr: { name: "Scotch Whisky On the Rocks", description: "Whisky écossais pur malt de 12 ans d'âge — servi sur de gros glaçons coupés à la main." },
+                zh: { name: "苏格兰威士忌", description: "陈酿 12 年的单麦芽苏格兰威士忌——搭配大块手工切割的冰块。" },
+                ar: { name: "ويسكي سكوتش", description: "ويسكي سكوتش سينجل مالت معتق لمدة 12 عامًا - يقدم مع مكعبات ثلج كبيرة مقطوعة يدويًا." }
+            },
 
             // COFFEE & TEA
-            { id: 18, name: "Ethiopian Ceremony Coffee", description: "Authentic Habesha coffee ceremony — roasted Ethiopian beans served with popcorn & incense.", price: 250, category: "coffee", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80" },
-            { id: 19, name: "Signature Cappuccino", description: "Double shot espresso with steamed whole milk, topped with thick microfoam art.", price: 280, category: "coffee", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80" },
-            { id: 20, name: "Premium Matcha Latte", description: "Ceremonial grade Japanese matcha whisked with oat milk, lightly sweetened with honey.", price: 320, category: "coffee", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80" },
+            {
+                id: 18,
+                price: 250,
+                category: "coffee",
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80",
+                en: { name: "Ethiopian Ceremony Coffee", description: "Authentic Habesha coffee ceremony — roasted Ethiopian beans served with popcorn & incense." },
+                am: { name: "የኢትዮጵያ የቡና ሥነ-ሥርዓት", description: "ትክክለኛ የሀበሻ ቡና ሥነ-ሥርዓት - የተቆላ የኢትዮጵያ ቡና በፈንዲሻ እና በዕጣን የታጀበ።" },
+                fr: { name: "Café de cérémonie éthiopien", description: "Authentique cérémonie du café Habesha — grains éthiopiens torréfiés servis avec du pop-corn et de l'encens." },
+                zh: { name: "埃塞俄比亚咖啡仪式", description: "正宗的 Habesha 咖啡仪式——烘焙过的埃塞俄比亚咖啡豆，配爆米花和香。" },
+                ar: { name: "حفل القهوة الإثيوبي", description: "حفل قهوة حبشية أصيلة - حبوب بن إثيوبية محمصة تقدم مع الفشار والبخور." }
+            },
+            {
+                id: 19,
+                price: 280,
+                category: "coffee",
+                image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80",
+                en: { name: "Signature Cappuccino", description: "Double shot espresso with steamed whole milk, topped with thick microfoam art." },
+                am: { name: "ሲግኔቸር ካፑቺኖ", description: "ድርብ ሾት ኤስፕሬሶ በወተት እና በሚያምር አረፋ።" },
+                fr: { name: "Cappuccino Signature", description: "Double shot d'espresso avec du lait entier vaporisé, surmonté d'un art de mousse épaisse." },
+                zh: { name: "招牌卡布奇诺", description: "双份浓缩咖啡配蒸全脂牛奶，顶部有厚实的拉花奶泡。" },
+                ar: { name: "كابتشينو خاص", description: "جرعة مزدوجة من الإسبريسو مع حليب كامل الدسم مبخر، مغطى برغوة كثيفة." }
+            },
+            {
+                id: 20,
+                price: 320,
+                category: "coffee",
+                image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80",
+                en: { name: "Premium Matcha Latte", description: "Ceremonial grade Japanese matcha whisked with oat milk, lightly sweetened with honey." },
+                am: { name: "ፕሪሚየም ማቻ ላቴ", description: "የጃፓን ማቻ በአጃ ወተት እና በማር።" },
+                fr: { name: "Matcha Latte Premium", description: "Matcha japonais de qualité cérémonielle fouetté avec du lait d'avoine, légèrement sucré au miel." },
+                zh: { name: "优质抹茶拿铁", description: "礼仪级日本抹茶配燕麦奶，加入蜂蜜微甜。" },
+                ar: { name: "ماتشا لاتي فاخر", description: "ماتشا يابانية من الدرجة الاحتفالية مخفوقة مع حليب الشوفان، محلاة قليلاً بالعسل." }
+            },
 
             // FRESH JUICES
-            { id: 21, name: "Fresh Mango Juice", description: "Freshly pressed Ethiopian Alphonso mangoes — sweet, vibrant, and naturally nourishing.", price: 280, category: "juice", image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=500&q=80" },
-            { id: 22, name: "Avocado Juice", description: "Creamy Ethiopian avocado blended with honey and a touch of lemon — a local favourite.", price: 320, category: "juice", image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=800&q=80" },
+            {
+                id: 21,
+                price: 280,
+                category: "juice",
+                image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=500&q=80",
+                en: { name: "Fresh Mango Juice", description: "Freshly pressed Ethiopian Alphonso mangoes — sweet, vibrant, and naturally nourishing." },
+                am: { name: "ትኩስ የማንጎ ጭማቂ", description: "አዲስ የተጨመቀ የኢትዮጵያ ማንጎ - ጣፋጭ እና ተፈጥሯዊ።" },
+                fr: { name: "Jus de mangue frais", description: "Mangues éthiopiennes Alphonso fraîchement pressées — sucrées, vibrantes et naturellement nourrissantes." },
+                zh: { name: "鲜榨芒果汁", description: "新鲜压榨的埃塞俄比亚芒果——甜美、充满活力且富含营养。" },
+                ar: { name: "عصير مانجو طازج", description: "مانجو إثيوبية طازجة ومعصورة - حلوة وحيوية ومغذية طبيعياً." }
+            },
+            {
+                id: 22,
+                price: 320,
+                category: "juice",
+                image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=800&q=80",
+                en: { name: "Avocado Juice", description: "Creamy Ethiopian avocado blended with honey and a touch of lemon — a local favourite." },
+                am: { name: "የአቮካዶ ጭማቂ", description: "የኢትዮጵያ አቮካዶ በማር እና በሎሚ - የሀገር ውስጥ ተወዳጅ።" },
+                fr: { name: "Jus d'avocat", description: "Avocat éthiopien crémeux mélangé avec du miel et une touche de citron — un favori local." },
+                zh: { name: "牛油果汁", description: "细腻的埃塞俄比亚牛油果配蜂蜜和少许柠檬——当地最爱。" },
+                ar: { name: "عصير أفوكادو", description: "أفوكادو إثيوبي كريمي ممزوج بالعسل ولمسة من الليمون - مفضل محلياً." }
+            },
 
             // FOOD
-            { id: 23, name: "Wood-Fired Margherita Pizza", description: "Classic Napolitana dough, San Marzano tomato, fresh buffalo mozzarella, basil and olive oil.", price: 800, category: "food", image: "https://images.unsplash.com/photo-1604068549290-2d61dbf30ce3?w=500&q=80" },
-            { id: 24, name: "Caesar Salad", description: "Crisp romaine, housemade Caesar dressing, Parmesan shavings, croutons, anchovies on request.", price: 520, category: "food", image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80" },
-            { id: 25, name: "Club Sandwich", description: "Classic triple-decker with chicken, eggs, beef bacon, lettuce, tomato and mayo served with fries.", price: 650, category: "food", image: "5.PNG" },
-            { id: 26, name: "Spicy Tibs", description: "Traditional Ethiopian sautéed beef with onion, garlic, and fresh green chili served with Injera.", price: 720, category: "food", image: "6.PNG" },
+            {
+                id: 23,
+                price: 800,
+                category: "food",
+                image: "https://images.unsplash.com/photo-1604068549290-2d61dbf30ce3?w=500&q=80",
+                en: { name: "Wood-Fired Margherita Pizza", description: "Classic Napolitana dough, San Marzano tomato, fresh buffalo mozzarella, basil and olive oil." },
+                am: { name: "ማርገሪታ ፒዛ", description: "ክላሲክ ናፖሊታና ፒዛ በቲማቲም፣ ሞዛሬላ አይብ እና የወይራ ዘይት።" },
+                fr: { name: "Pizza Margherita au feu de bois", description: "Pâte classique Napolitana, tomate San Marzano, mozzarella de bufflonne fraîche, basilic et huile d'olive." },
+                zh: { name: "柴烧玛格丽特比萨", description: "经典那不勒斯面团、圣马扎诺番茄、新鲜水牛芝士、罗勒和橄榄油。" },
+                ar: { name: "بيتزا مارغريتا", description: "عجينة نابوليتانا كلاسيكية، طماطم سان مارزانو، جبنة موزاريلا طازجة، ريحان وزيت زيتون." }
+            },
+            {
+                id: 24,
+                price: 520,
+                category: "food",
+                image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80",
+                en: { name: "Caesar Salad", description: "Crisp romaine, housemade Caesar dressing, Parmesan shavings, croutons, anchovies on request." },
+                am: { name: "ሲዘር ሰላጣ", description: "ሮሜን ሰላጣ በሲዘር ድሬሲንግ፣ ፓርሜዛን አይብ እና ክራውቶን።" },
+                fr: { name: "Salade César", description: "Romaine croquante, vinaigrette César maison, copeaux de parmesan, croûtons, anchois sur demande." },
+                zh: { name: "凯撒沙拉", description: "脆罗马生菜、自制凯撒酱、帕尔马干酪碎、面包丁，可根据要求添加安乔维鱼。" },
+                ar: { name: "سلطة سيزر", description: "خس روماني مقرمش، تتبيلة سيزر محلية الصنع، جبنة بارميزان، قطع خبز محمص، وأنشوجة حسب الطلب." }
+            },
+            {
+                id: 25,
+                price: 650,
+                category: "food",
+                image: "5.PNG",
+                en: { name: "Club Sandwich", description: "Classic triple-decker with chicken, eggs, beef bacon, lettuce, tomato and mayo served with fries." },
+                am: { name: "ክለብ ሳንድዊች", description: "ባለሶስት ፎቅ ሳንድዊች ከዶሮ፣ እንቁላል፣ የበሬ ስጋ ቤከን፣ ሰላጣ፣ ቲማቲም እና ማዮኔዝ ጋር ከቺፕስ ጋር።" },
+                fr: { name: "Club Sandwich", description: "Sandwich classique à trois étages avec poulet, œufs, bacon de bœuf, laitue, tomate et mayo, servi avec des frites." },
+                zh: { name: "总汇三明治", description: "经典三层三明治，配鸡肉、鸡蛋、牛肉培根、生菜、西红柿和蛋黄酱，配薯条。" },
+                ar: { name: "كلوب ساندويتش", description: "ساندويتش كلاسيكي من ثلاث طبقات مع دجاج وبيض ولحم بقري مقدد وخس وطماطم ومايونيز يقدم مع البطاطس المقلية." }
+            },
+            {
+                id: 26,
+                price: 720,
+                category: "food",
+                image: "6.PNG",
+                en: { name: "Spicy Tibs", description: "Traditional Ethiopian sautéed beef with onion, garlic, and fresh green chili served with Injera." },
+                am: { name: "ቅመም የበዛበት ጥብስ", description: "ባህላዊ የኢትዮጵያ የበሬ ጥብስ በሽንኩርት፣ ነጭ ሽንኩርት እና ቃሪያ ከእንጀራ ጋር።" },
+                fr: { name: "Tibs épicés", description: "Bœuf sauté éthiopien traditionnel avec oignon, ail et piment vert frais servi avec de l'Injera." },
+                zh: { name: "辣提布斯", description: "传统的埃塞俄比亚炒牛肉，配洋葱、大蒜和新鲜绿辣椒，搭配英吉拉面包。" },
+                ar: { name: "تيبس حار", description: "لحم بقري إثيوبي تقليدي سوتيه مع البصل والثوم والفلفل الأخضر الطازج يقدم مع الإنجيرا." }
+            },
 
             // DESSERT
-            { id: 27, name: "Chocolate Lava Cake", description: "Warm Belgian chocolate molten cake served with vanilla ice cream and raspberry coulis.", price: 450, category: "dessert", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80" }
+            {
+                id: 27,
+                price: 450,
+                category: "dessert",
+                image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80",
+                en: { name: "Chocolate Lava Cake", description: "Warm Belgian chocolate molten cake served with vanilla ice cream and raspberry coulis." },
+                am: { name: "የቾኮሌት ላቫ ኬክ", description: "የቤልጂየም ቾኮሌት ኬክ በቫኒላ አይስ ክሬም የታጀበ።" },
+                fr: { name: "Gâteau fondant au chocolat", description: "Gâteau fondant au chocolat belge servi avec une glace vanille et un coulis de framboise." },
+                zh: { name: "巧克力熔岩蛋糕", description: "比利时巧克力熔岩蛋糕，配香草冰淇淋和覆盆子酱。" },
+                ar: { name: "كيكة الشوكولاتة الذائبة", description: "كيكة شوكولاتة بلجيكية دافئة تقدم مع آيس كريم فانيليا وصوص التوت." }
+            }
         ];
 
         const { useState, useEffect, useMemo } = React;
 
         const App = () => {
+            const [language, setLanguage] = useState(() => localStorage.getItem('nexus-lang') || 'en');
+            const [isLangOpen, setIsLangOpen] = useState(false);
+
+            useEffect(() => {
+                localStorage.setItem('nexus-lang', language);
+            }, [language]);
             const [activeCategory, setActiveCategory] = useState('all');
             const [cart, setCart] = useState([]);
             const [isModalOpen, setIsModalOpen] = useState(false);
             const [scrolled, setScrolled] = useState(false);
             const [recentlyAdded, setRecentlyAdded] = useState(null);
             const [infoItem, setInfoItem] = useState(null);
-            const [tableNumber, setTableNumber] = useState('1');
+            const [tableNumber, setTableNumber] = useState('');
+
+            const languages = [
+                { code: 'en', name: 'English', flag: 'https://flagcdn.com/w40/gb.png' },
+                { code: 'am', name: 'አማርኛ', flag: 'https://flagcdn.com/w40/et.png' },
+                { code: 'fr', name: 'Français', flag: 'https://flagcdn.com/w40/fr.png' },
+                { code: 'zh', name: '中文', flag: 'https://flagcdn.com/w40/cn.png' },
+                { code: 'ar', name: 'العربية', flag: 'https://flagcdn.com/w40/sa.png' }
+            ];
+
+            const currentLang = languages.find(l => l.code === language);
+            const t = translations[language];
 
             const categories = [
-                { id: 'all', label: 'All Items', icon: '✨' },
-                { id: 'breakfast', label: 'Breakfast', icon: '🍳' },
-                { id: 'cocktail', label: 'Cocktails', icon: '🍹' },
-                { id: 'mocktail', label: 'Mocktails', icon: '🥤' },
-                { id: 'wine', label: 'Wines & Spirits', icon: '🍷' },
-                { id: 'coffee', label: 'Coffee & Tea', icon: '☕' },
-                { id: 'juice', label: 'Fresh Juices', icon: '🥭' },
-                { id: 'food', label: 'Food & Snacks', icon: '🍽️' },
-                { id: 'dessert', label: 'Desserts', icon: '🍰' },
+                { id: 'all', label: t.all, icon: '✨' },
+                { id: 'breakfast', label: t.breakfast, icon: '🍳' },
+                { id: 'cocktail', label: t.cocktail, icon: '🍹' },
+                { id: 'mocktail', label: t.mocktail, icon: '🥤' },
+                { id: 'wine', label: t.wine, icon: '🍷' },
+                { id: 'coffee', label: t.coffee, icon: '☕' },
+                { id: 'juice', label: t.juice, icon: '🥭' },
+                { id: 'food', label: t.food, icon: '🍽️' },
+                { id: 'dessert', label: t.dessert, icon: '🍰' },
             ];
 
             const filteredItems = useMemo(() => {
-                if (activeCategory === 'all') return menuData;
-                return menuData.filter(item => item.category === activeCategory);
-            }, [activeCategory]);
+                let items = activeCategory === 'all' ? menuData : menuData.filter(item => item.category === activeCategory);
+                return items.map(item => ({
+                    ...item,
+                    name: item[language]?.name || item.name,
+                    description: item[language]?.description || item.description
+                }));
+            }, [activeCategory, language]);
 
             useEffect(() => {
                 const handleScroll = () => setScrolled(window.scrollY > 100);
                 window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
+
+                const handleClickOutside = (e) => {
+                    if (!e.target.closest('.lang-selector')) {
+                        setIsLangOpen(false);
+                    }
+                };
+                window.addEventListener('click', handleClickOutside);
+
+                return () => {
+                    window.removeEventListener('scroll', handleScroll);
+                    window.removeEventListener('click', handleClickOutside);
+                };
             }, []);
 
             const addToCart = (item) => {
@@ -889,15 +1421,17 @@
                 const vat = subtotal * 0.15;
                 const serviceCharge = subtotal * 0.10;
                 const grandTotal = subtotal + vat + serviceCharge;
+                const generatedOrderId = 'NEX-' + Math.random().toString(36).substr(2, 6).toUpperCase();
 
                 const receiptContent = `
                     <html>
                         <head>
-                            <title>Swiss Inn Nexus - Receipt</title>
+                            <title>${t.nexusAddis} - Receipt</title>
                             <style>
                                 body { font-family: 'Courier New', Courier, monospace; padding: 20px; width: 300px; margin: 0 auto; color: #000; }
                                 .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
                                 .hotel-name { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; }
+                                .info-section { font-size: 0.8rem; margin-bottom: 15px; text-align: left; }
                                 .item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
                                 .divider { border-top: 1px dashed #000; margin: 10px 0; }
                                 .total-section { font-weight: bold; }
@@ -906,38 +1440,42 @@
                         </head>
                         <body>
                             <div class="header">
-                                <div class="hotel-name">Swiss Inn Nexus</div>
-                                <div>Lobby Bar Menu</div>
-                                <div style="font-weight: bold; margin: 5px 0;">Table / Seat: ${tableNumber}</div>
+                                <div class="hotel-name">${t.nexusAddis}</div>
+                                <div>${t.heroTitle}</div>
+                            </div>
+                            <div class="info-section">
+                                <div>Order ID: ${generatedOrderId}</div>
+                                <div>${t.tableNumber}: ${tableNumber || 'N/A'}</div>
                                 <div>Date: ${new Date().toLocaleString()}</div>
                             </div>
+                            <div class="divider"></div>
                             ${cart.map(item => `
                                 <div class="item-row">
-                                    <span>${item.quantity}x ${item.name}</span>
+                                    <span>${item.quantity}x ${item[language]?.name || item.name}</span>
                                     <span>ETB ${(item.price * item.quantity).toFixed(2)}</span>
                                 </div>
                             `).join('')}
                             <div class="divider"></div>
                             <div class="item-row">
-                                <span>Subtotal:</span>
+                                <span>${t.subtotal}:</span>
                                 <span>ETB ${subtotal.toFixed(2)}</span>
                             </div>
                             <div class="item-row">
-                                <span>VAT (15%):</span>
+                                <span>${t.vat}:</span>
                                 <span>ETB ${vat.toFixed(2)}</span>
                             </div>
                             <div class="item-row">
-                                <span>Service Charge (10%):</span>
+                                <span>${t.serviceCharge}:</span>
                                 <span>ETB ${serviceCharge.toFixed(2)}</span>
                             </div>
                             <div class="divider"></div>
                             <div class="item-row total-section">
-                                <span>GRAND TOTAL:</span>
+                                <span>${t.grandTotal}:</span>
                                 <span>ETB ${grandTotal.toFixed(2)}</span>
                             </div>
                             <div class="footer">
-                                Thank you for visiting!<br>
-                                Nexus Hotel Addis Ababa
+                                ${t.thankYou}<br>
+                                ${t.nexusAddis}
                             </div>
                             <script>
                                 window.onload = () => {
@@ -963,24 +1501,32 @@
                             <div className="custom-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 <div className="part-top">Swiss Inn</div>
                                 <div className="part-line"></div>
-                                <div className="part-bottom">Nexus Hotel Addis Ababa</div>
+                                <div className="part-bottom">{t.nexusAddis}</div>
                             </div>
-
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div className="table-selector-wrap">
-                                    <span>🪑 Seat:</span>
-                                    <select
-                                        className="table-select"
-                                        value={tableNumber}
-                                        onChange={(e) => setTableNumber(e.target.value)}
-                                    >
-                                        {[...Array(20)].map((_, i) => (
-                                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                <div className="lang-selector">
+                                    <button className="lang-dropdown-btn" onClick={() => setIsLangOpen(!isLangOpen)}>
+                                        <img src={currentLang.flag} alt="" className="lang-flag-img" />
+                                        <span>{currentLang.name}</span>
+                                        <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>{isLangOpen ? '▲' : '▼'}</span>
+                                    </button>
+                                    <div className={`lang-dropdown-list ${isLangOpen ? 'open' : ''}`}>
+                                        {languages.map(lang => (
+                                            <div
+                                                key={lang.code}
+                                                className={`lang-item ${language === lang.code ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setLanguage(lang.code);
+                                                    setIsLangOpen(false);
+                                                }}
+                                            >
+                                                <img src={lang.flag} alt="" className="lang-flag-img" />
+                                                <span>{lang.name}</span>
+                                            </div>
                                         ))}
-                                    </select>
+                                    </div>
                                 </div>
-                                <div id="google_translate_element"></div>
-                                <button className="add-to-order-btn" style={{ marginLeft: '15px' }} onClick={() => {
+                                <button className="add-to-order-btn" onClick={() => {
                                     const el = document.getElementById('menu');
                                     if (el) {
                                         const headerHeight = 80;
@@ -990,7 +1536,7 @@
                                         });
                                     }
                                 }}>
-                                    Explore Menu
+                                    {t.exploreMenu}
                                 </button>
                             </div>
                         </div>
@@ -1001,8 +1547,8 @@
                             <div className="hero-logo-large">
                                 <img src="Swiss%20Inn%20Nexus-Logo%20for%20Email.png" alt="Logo" />
                             </div>
-                            <h1 className="hero-title">Nexus Lobby Bar</h1>
-                            <p className="hero-subtitle">Premium Selections & International Flavours</p>
+                            <h1 className="hero-title">{t.heroTitle}</h1>
+                            <p className="hero-subtitle">{t.heroSubtitle}</p>
                             <button className="add-to-order-btn" style={{ padding: '15px 40px', fontSize: '1rem' }} onClick={() => {
                                 const el = document.getElementById('menu');
                                 if (el) {
@@ -1013,15 +1559,15 @@
                                     });
                                 }
                             }}>
-                                View Menu ↓
+                                {t.viewMenu}
                             </button>
                         </div>
                     </section>
 
                     <section id="menu" className="container section" style={{ paddingTop: '80px' }}>
                         <div className="section-header">
-                            <span className="section-label">Curated Selection</span>
-                            <h2 className="section-title">Our Menu</h2>
+                            <span className="section-label">{t.curatedSelection}</span>
+                            <h2 className="section-title">{t.ourMenu}</h2>
                             <div className="section-divider"></div>
                         </div>
 
@@ -1056,7 +1602,7 @@
                                                 className="read-more-btn"
                                                 onClick={() => setInfoItem(item)}
                                             >
-                                                See More
+                                                {t.seeMore}
                                             </button>
                                         )}
                                         <div className="card-footer">
@@ -1065,14 +1611,14 @@
                                                 className={`add-to-order-btn ${recentlyAdded === item.id ? 'success' : ''}`}
                                                 onClick={() => addToCart(item)}
                                             >
-                                                {recentlyAdded === item.id ? '✓ Added' : '+ Add'}
+                                                {recentlyAdded === item.id ? t.added : t.add}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                             {activeCategory === 'breakfast' && (
-                                <div className="tax-disclaimer">Prices include 15% VAT and 10% Service Charge</div>
+                                <div className="tax-disclaimer">{t.taxDisclaimer}</div>
                             )}
                         </div>
                     </section>
@@ -1083,14 +1629,14 @@
                                 <div className="custom-logo">
                                     <div className="part-top">Swiss Inn</div>
                                     <div className="part-line"></div>
-                                    <div className="part-bottom">Nexus Hotel Addis Ababa</div>
+                                    <div className="part-bottom">{t.nexusAddis}</div>
                                 </div>
                             </div>
                             <div className="footer-links">
                                 <a href="#">📍 Addis Ababa</a>
                                 <a href="#">📞 +251 11 000 0000</a>
                             </div>
-                            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© 2025 Swiss Inn Nexus Hotel. All rights reserved.</p>
+                            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© 2025 {t.nexusAddis}. All rights reserved.</p>
                         </div>
                     </footer>
 
@@ -1106,7 +1652,7 @@
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         >
                             <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>↑</span>
-                            <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: '700' }}>Top</span>
+                            <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', fontWeight: '700' }}>{t.top}</span>
                         </button>
                     )}
 
@@ -1114,14 +1660,26 @@
                         <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
                             <div className="modal-content" onClick={e => e.stopPropagation()}>
                                 <div className="modal-header">
-                                    <h3>Order Summary</h3>
+                                    <h3>{t.orderSummary}</h3>
                                     <button style={{ background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setIsModalOpen(false)}>&times;</button>
                                 </div>
                                 <div className="modal-body">
+                                    <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px', color: 'var(--navy)' }}>
+                                            {t.tableNumber}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="..."
+                                            value={tableNumber}
+                                            onChange={(e) => setTableNumber(e.target.value)}
+                                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '1rem' }}
+                                        />
+                                    </div>
                                     {cart.map(item => (
                                         <div key={item.id} className="order-item">
                                             <div>
-                                                <div className="order-item-name">{item.name}</div>
+                                                <div className="order-item-name">{item[language]?.name || item.name}</div>
                                                 <div className="order-item-price">ETB {item.price.toFixed(2)}</div>
                                             </div>
                                             <div className="order-item-controls">
@@ -1135,10 +1693,10 @@
                                 </div>
                                 <div className="modal-footer">
                                     <div className="total-row">
-                                        <span>Total</span>
+                                        <span>{t.total}</span>
                                         <span>ETB {totalPrice.toFixed(2)}</span>
                                     </div>
-                                    <button className="checkout-btn" onClick={() => { handlePrint(); alert('Order Prepared & Sent to Printer!'); setCart([]); setIsModalOpen(false); }}>Prepare Order</button>
+                                    <button className="checkout-btn" onClick={() => { handlePrint(); alert('Order Prepared & Sent to Printer!'); setCart([]); setIsModalOpen(false); }}>{t.prepareOrder}</button>
                                 </div>
                             </div>
                         </div>
@@ -1148,15 +1706,15 @@
                         <div className="modal-overlay" onClick={() => setInfoItem(null)}>
                             <div className="modal-content" onClick={e => e.stopPropagation()}>
                                 <div className="modal-header">
-                                    <h3>Item Details</h3>
+                                    <h3>{t.itemDetails}</h3>
                                     <button style={{ background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }} onClick={() => setInfoItem(null)}>&times;</button>
                                 </div>
                                 <div className="desc-modal-content">
-                                    <img src={infoItem.image} alt={infoItem.name} className="desc-modal-img" />
-                                    <h3 className="desc-modal-title">{infoItem.name}</h3>
-                                    <p className="desc-modal-text">{infoItem.description}</p>
+                                    <img src={infoItem.image} alt={infoItem[language]?.name || infoItem.name} className="desc-modal-img" />
+                                    <h3 className="desc-modal-title">{infoItem[language]?.name || infoItem.name}</h3>
+                                    <p className="desc-modal-text">{infoItem[language]?.description || infoItem.description}</p>
                                     <button className="checkout-btn" onClick={() => { addToCart(infoItem); setInfoItem(null); }}>
-                                        Add to Order - ETB {infoItem.price.toFixed(2)}
+                                        {t.addToOrder} - ETB {infoItem.price.toFixed(2)}
                                     </button>
                                 </div>
                             </div>
@@ -1168,14 +1726,6 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
-
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
     </script>
 </body>
 
