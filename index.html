@@ -181,7 +181,7 @@
             z-index: 1000;
             background: rgba(13, 27, 42, 0.85);
             backdrop-filter: blur(10px);
-            padding: 10px 0;
+            padding: 5px 0;
             border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
         }
@@ -199,7 +199,9 @@
             align-items: center;
             font-family: 'Playfair Display', serif;
             cursor: pointer;
-            transform: scale(0.65);
+            transform: scale(0.5);
+            /* Smaller logo globally */
+            margin: -5px 0;
         }
 
         .custom-logo .part-top {
@@ -600,6 +602,24 @@
             font-size: 0.85rem;
         }
 
+        .special-notes-area {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: none;
+            margin-top: 10px;
+            background: #fdfcf8;
+            transition: border-color 0.3s;
+        }
+
+        .special-notes-area:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
         .order-item-controls {
             display: flex;
             align-items: center;
@@ -809,6 +829,20 @@
             .tab-btn.active {
                 transform: scale(1.02);
             }
+
+            .sticky-header {
+                padding: 3px 0;
+                /* Extremely thin on phone */
+            }
+
+            .custom-logo {
+                transform: scale(0.45);
+                margin: -8px 0;
+            }
+
+            .lang-dropdown-btn {
+                padding: 4px 8px;
+            }
         }
 
         /* PRINT STYLES */
@@ -880,7 +914,9 @@
                 coffee: "Coffee & Tea",
                 juice: "Fresh Juices",
                 food: "Food & Snacks",
-                dessert: "Desserts"
+                dessert: "Desserts",
+                specialInstructions: "Special Request / Notes",
+                notePlaceholder: "E.g., No onions, extra spicy, etc."
             },
             am: {
                 heroTitle: "ስዊስ ኢን ኔክሰስ ሆቴል",
@@ -917,7 +953,9 @@
                 coffee: "ቡና እና ሻይ",
                 juice: "ትኩስ ጭማቂዎች",
                 food: "ምግብ እና መክሰስ",
-                dessert: "ጣፋጭ"
+                dessert: "ጣፋጭ",
+                specialInstructions: "ልዩ ትዕዛዝ / ማስታወሻ",
+                notePlaceholder: "ለምሳሌ፦ ሽንኩርት አይኑረው፣ በርበሬ ይብዛበት..."
             },
             fr: {
                 heroTitle: "Swiss Inn Nexus Hotel",
@@ -954,7 +992,9 @@
                 coffee: "Café et Thé",
                 juice: "Jus Frais",
                 food: "Nourriture et Snacks",
-                dessert: "Desserts"
+                dessert: "Desserts",
+                specialInstructions: "Demandes Spéciales / Notes",
+                notePlaceholder: "Ex: Pas d'oignons, très épicé, etc."
             },
             zh: {
                 heroTitle: "Swiss Inn Nexus 酒店",
@@ -991,7 +1031,9 @@
                 coffee: "咖啡和茶",
                 juice: "鲜榨果汁",
                 food: "美食和小吃",
-                dessert: "甜点"
+                dessert: "甜点",
+                specialInstructions: "特殊要求 / 备注",
+                notePlaceholder: "例如：不要洋葱，加辣等。"
             },
             ar: {
                 heroTitle: "بار لوبي نكسس",
@@ -1028,7 +1070,9 @@
                 coffee: "قهوة وشاي",
                 juice: "عصائر طازجة",
                 food: "طعام ووجبات خفيفة",
-                dessert: "حلويات"
+                dessert: "حلويات",
+                specialInstructions: "طلبات خاصة / ملاحظات",
+                notePlaceholder: "مثال: بدون بصل، حار جداً، إلخ..."
             }
         };
 
@@ -1352,6 +1396,7 @@
         const App = () => {
             const [language, setLanguage] = useState(() => localStorage.getItem('nexus-lang') || 'en');
             const [isLangOpen, setIsLangOpen] = useState(false);
+            const [specialInstructions, setSpecialInstructions] = useState("");
 
             useEffect(() => {
                 localStorage.setItem('nexus-lang', language);
@@ -1462,6 +1507,7 @@
                                 <div>${t.orderId}: ${generatedOrderId}</div>
                                 <div>${t.tableNumber}: ${tableNumber || 'N/A'}</div>
                                 <div>${t.date}: ${new Date().toLocaleString()}</div>
+                                ${specialInstructions ? `<div><strong>Notes:</strong> ${specialInstructions}</div>` : ''}
                             </div>
                             <div class="divider"></div>
                             ${cart.map(item => `
@@ -1691,6 +1737,18 @@
                                             style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '1rem' }}
                                         />
                                     </div>
+                                    <div style={{ marginBottom: '20px', padding: '15px', background: '#fcfbf6', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px', color: 'var(--navy)' }}>
+                                            {t.specialInstructions}
+                                        </label>
+                                        <textarea
+                                            className="special-notes-area"
+                                            placeholder={t.notePlaceholder}
+                                            value={specialInstructions}
+                                            onChange={(e) => setSpecialInstructions(e.target.value)}
+                                            rows="3"
+                                        />
+                                    </div>
                                     {cart.map(item => (
                                         <div key={item.id} className="order-item">
                                             <div>
@@ -1711,7 +1769,7 @@
                                         <span>{t.total}</span>
                                         <span>ETB {totalPrice.toFixed(2)}</span>
                                     </div>
-                                    <button className="checkout-btn" onClick={() => { handlePrint(); alert(t.orderPrepared); setCart([]); setIsModalOpen(false); }}>{t.prepareOrder}</button>
+                                    <button className="checkout-btn" onClick={() => { handlePrint(); alert(t.orderPrepared); setCart([]); setSpecialInstructions(""); setIsModalOpen(false); }}>{t.prepareOrder}</button>
                                 </div>
                             </div>
                         </div>
