@@ -1839,7 +1839,14 @@
                                     onClick={() => {
                                         setActiveCategory(cat.id);
                                         setIsCatMenuOpen(false);
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                        const el = document.getElementById('menu');
+                                        if (el) {
+                                            const headerHeight = 80;
+                                            window.scrollTo({
+                                                top: el.offsetTop - headerHeight,
+                                                behavior: 'smooth'
+                                            });
+                                        }
                                     }}
                                 >
                                     <span className="cat-item-icon">{cat.icon}</span>
