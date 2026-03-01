@@ -545,6 +545,118 @@
             justify-content: center;
         }
 
+        /* EXPANDABLE CATEGORY MENU (BOTTOM LEFT) */
+        .category-menu-float {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .category-trigger-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .category-trigger-btn.active {
+            transform: rotate(45deg);
+            background: var(--danger);
+            border-color: white;
+        }
+
+        .category-panel {
+            background: rgba(13, 27, 42, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px;
+            width: 180px;
+            max-height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom left;
+        }
+
+        .category-panel.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .cat-item-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .cat-item-btn:hover {
+            background: rgba(200, 168, 75, 0.2);
+        }
+
+        .cat-item-btn.active {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .cat-item-icon {
+            font-size: 1.2rem;
+        }
+
+        .cat-item-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .category-menu-float {
+                bottom: 25px;
+                left: 15px;
+                gap: 10px;
+            }
+
+            .category-trigger-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .category-panel {
+                width: 160px;
+                max-height: 280px;
+            }
+        }
+
         /* MODAL */
         .modal-overlay {
             position: fixed;
@@ -1413,6 +1525,7 @@
             const [recentlyAdded, setRecentlyAdded] = useState(null);
             const [infoItem, setInfoItem] = useState(null);
             const [tableNumber, setTableNumber] = useState('');
+            const [isCatMenuOpen, setIsCatMenuOpen] = useState(false);
 
             const languages = [
                 { code: 'en', name: 'English', flag: 'https://flagcdn.com/w40/gb.png' },
@@ -1453,6 +1566,9 @@
                 const handleClickOutside = (e) => {
                     if (!e.target.closest('.lang-selector')) {
                         setIsLangOpen(false);
+                    }
+                    if (!e.target.closest('.category-menu-float')) {
+                        setIsCatMenuOpen(false);
                     }
                 };
                 window.addEventListener('click', handleClickOutside);
@@ -1705,6 +1821,33 @@
                             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>© 2025 {t.nexusAddis}. All rights reserved.</p>
                         </div>
                     </footer>
+
+                    {/* Expandable Category Menu (Bottom Left) */}
+                    <div className="category-menu-float">
+                        <button
+                            className={`category-trigger-btn ${isCatMenuOpen ? 'active' : ''}`}
+                            onClick={() => setIsCatMenuOpen(!isCatMenuOpen)}
+                        >
+                            {isCatMenuOpen ? '×' : '📖'}
+                        </button>
+
+                        <div className={`category-panel ${isCatMenuOpen ? 'open' : ''}`}>
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    className={`cat-item-btn ${activeCategory === cat.id ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setActiveCategory(cat.id);
+                                        setIsCatMenuOpen(false);
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }}
+                                >
+                                    <span className="cat-item-icon">{cat.icon}</span>
+                                    <span className="cat-item-name">{cat.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
 
                     {totalItems > 0 && (
                         <button className="bill-float-btn" onClick={() => setIsModalOpen(true)}>
