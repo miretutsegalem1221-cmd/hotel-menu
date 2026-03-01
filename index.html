@@ -582,64 +582,7 @@
             border-color: white;
         }
 
-        .category-panel {
-            background: rgba(13, 27, 42, 0.95);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 10px;
-            width: 180px;
-            max-height: 350px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            transform: translateY(20px) scale(0.8);
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: bottom left;
-        }
 
-        .category-panel.open {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .cat-item-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: left;
-        }
-
-        .cat-item-btn:hover {
-            background: rgba(200, 168, 75, 0.2);
-        }
-
-        .cat-item-btn.active {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .cat-item-icon {
-            font-size: 1.2rem;
-        }
-
-        .cat-item-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
 
         @media (max-width: 600px) {
             .category-menu-float {
@@ -655,10 +598,7 @@
                 font-size: 0.85rem;
             }
 
-            .category-panel {
-                width: 160px;
-                max-height: 280px;
-            }
+
         }
 
         /* MODAL */
@@ -1529,13 +1469,12 @@
             const [recentlyAdded, setRecentlyAdded] = useState(null);
             const [infoItem, setInfoItem] = useState(null);
             const [tableNumber, setTableNumber] = useState('');
-            const [isCatMenuOpen, setIsCatMenuOpen] = useState(false);
             const [triggerIndex, setTriggerIndex] = useState(0);
 
             useEffect(() => {
                 const interval = setInterval(() => {
                     setTriggerIndex(prev => (prev + 1) % 9);
-                }, 2500);
+                }, 45000);
                 return () => clearInterval(interval);
             }, []);
 
@@ -1578,9 +1517,6 @@
                 const handleClickOutside = (e) => {
                     if (!e.target.closest('.lang-selector')) {
                         setIsLangOpen(false);
-                    }
-                    if (!e.target.closest('.category-menu-float')) {
-                        setIsCatMenuOpen(false);
                     }
                 };
                 window.addEventListener('click', handleClickOutside);
@@ -1834,40 +1770,29 @@
                         </div>
                     </footer>
 
-                    {/* Expandable Category Menu (Bottom Left) */}
+                    {/* Floating Category Filter (Bottom Left) */}
                     <div className="category-menu-float">
                         <button
-                            className={`category-trigger-btn ${isCatMenuOpen ? 'active' : ''}`}
-                            onClick={() => setIsCatMenuOpen(!isCatMenuOpen)}
+                            className="category-trigger-btn"
+                            onClick={() => {
+                                const currentCat = categories[triggerIndex];
+                                if (currentCat) {
+                                    setActiveCategory(currentCat.id);
+                                    const el = document.getElementById('menu');
+                                    if (el) {
+                                        const headerHeight = 80;
+                                        window.scrollTo({
+                                            top: el.offsetTop - headerHeight,
+                                            behavior: 'smooth'
+                                        });
+                                    }
+                                }
+                            }}
                         >
                             <span style={{ transition: 'opacity 0.3s' }}>
-                                {isCatMenuOpen ? '×' : categories[triggerIndex]?.label || t.all}
+                                {categories[triggerIndex]?.label || t.all}
                             </span>
                         </button>
-
-                        <div className={`category-panel ${isCatMenuOpen ? 'open' : ''}`}>
-                            {categories.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    className={`cat-item-btn ${activeCategory === cat.id ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setActiveCategory(cat.id);
-                                        setIsCatMenuOpen(false);
-                                        const el = document.getElementById('menu');
-                                        if (el) {
-                                            const headerHeight = 80;
-                                            window.scrollTo({
-                                                top: el.offsetTop - headerHeight,
-                                                behavior: 'smooth'
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <span className="cat-item-icon">{cat.icon}</span>
-                                    <span className="cat-item-name">{cat.label}</span>
-                                </button>
-                            ))}
-                        </div>
                     </div>
 
                     {totalItems > 0 && (
