@@ -1474,7 +1474,7 @@
             useEffect(() => {
                 const interval = setInterval(() => {
                     setTriggerIndex(prev => (prev + 1) % 9);
-                }, 45000);
+                }, 15000);
                 return () => clearInterval(interval);
             }, []);
 
